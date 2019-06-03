@@ -42,8 +42,28 @@ $('.list').on('click', 'span', function(){
     }
   })
 });
-
-
+// al click sul pulsante modifica
+// permetto all'utente di modificare una voce
+$('#but_mod_list').click(function(){
+  var testo_modifica = $('#mod_list').val();
+  var mod_list_id = $('#sel_mod_list').val();
+  $('#mod_list').val('');
+  $('#sel_mod_list').html('');
+  $.ajax({
+    'url':url_base + mod_list_id,
+    'method':'put',
+    'data':{
+      'text':testo_modifica
+    },
+    'success':function(data){
+      stampaLista();
+      // $('.list').append('<div>'+ data.text +'</div>');
+    },
+    'error':function(){
+      alert(errore);
+    }
+  })
+});
 
 // funzione che mi stampa gli elementi della lista dopo prima
 // chiamata ajax
@@ -57,6 +77,7 @@ $('.list').on('click', 'span', function(){
         for (var i = 0; i < data.length; i++) {
           var elemento = data[i];
           $('.list').append('<div>'+ elemento.text +'<span data-id="'+ elemento.id +'"><i class="fas fa-trash-alt"></i></span></div>');
+          $('#sel_mod_list').append('<option value="' +elemento.id+'">'+ elemento.text +'</option>');
         }
       },
       'error':function(){
